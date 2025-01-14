@@ -318,8 +318,11 @@ Note that if some prerequisites are missing for the debugger client (lldb), like
 To  diagnose this type of deficiency, once the debugging is in progress (as seen by debug console showing the program stopped waiting for debugger connection), you can start manual debugging instead.
 For that, find ```lldb``` in the vscode extension files. For WSL, it is in ~/.vscode-server/extensions/wamr-ide.wamride-\<your version>/resource/debug/linux/bin/ .
 From that folder, run ```./lldb``` and follow the basic steps:
+if running on windows:  
 > (lldb) platform select remote-linux  
-(lldb) process connect -p wasm connect://xxx.xxx.xxx.xxx:1234
 
-If lldb crashes, you will get  a hint of what dependency is missing.
+in all cases:
+> (lldb) process connect -p wasm connect://127.0.0.1:1234
+
+If lldb crashed, you will get a hint of what dependency is missing.
 Note also that you may want to stop the container used for debugging if it is stuck, using the Docker extension.
