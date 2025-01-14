@@ -314,15 +314,16 @@ Click `Debug` button will trigger start ip `wamr-debug-server` docker image, and
 
 > Docker containers will be auto stopped and removed after the execution.
 
-Note that if some prerequisites are missing for the debugger client (lldb), like ```libncurses6``` for debug under WSL2, the debug will not start fully and after switching to the Run & Debug menu, nothing will show.
-To  diagnose this type of deficiency, once the debugging is in progress (as seen by debug console showing the program stopped waiting for debugger connection), you can start manual debugging instead.
-For that, find ```lldb``` in the vscode extension files. For WSL, it is in ~/.vscode-server/extensions/wamr-ide.wamride-\<your version>/resource/debug/linux/bin/ .
-From that folder, run ```./lldb``` and follow the basic steps:
-if running on windows:  
-> (lldb) platform select remote-linux  
+Note that if can happen that the installed extension has missing dependencies, here it could show as a failing debug session in the IDE.
+In the case of running the extension from WSL, check that the debugger ```lldb``` has all dependencies satisfied.  
+Example:  
+```shell
+$ ldd ~/.vscode-server/extensions/wamr-ide.wamride-<your version>/resource/debug/linux/bin/lldb | grep "not found"
+```
 
-in all cases:
-> (lldb) process connect -p wasm connect://127.0.0.1:1234
+in case of results like:
+> libncurses.so.6 => not found
+libpanel.so.6 => not found
 
-If lldb crashed, you will get a hint of what dependency is missing.
-Note also that you may want to stop the container used for debugging if it is stuck, using the Docker extension.
+proceed to install the missing packages on WSL.
+Stop any wasm container still running and any vscode terminal still trying to debug, and try again.
