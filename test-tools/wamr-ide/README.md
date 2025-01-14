@@ -14,7 +14,7 @@ The WAMR-IDE is an Integrated Development Environment to develop WebAssembly app
 
 ## How to setup WAMR IDE
 
-Now, the most straightforward way to install the WAMR IDE extension is by searching for WAMR-IDE in the VS Code extension marketplace and installing it directly. So, if you simply want to use WAMR debugging features in VS Code, this is the ideal (and effortless) way. And you are ready to [use WAMR IDE](#how-to-use-wamr-ide).
+Now, the most straightforward way to install the WAMR IDE extension is by searching for WAMR-IDE in the VS Code extension marketplace and installing it directly. So, if you simply want to use WAMR debugging features in VS Code, this is the ideal (and effortless) way. And you are ready to [use WAMR IDE](#how-to-use-wamr-ide). Debugging should work right away.
 
 > It is only recommended to download versions after 1.3.2 from the marketplace.
 
@@ -313,3 +313,13 @@ Click `Debug` button will trigger start ip `wamr-debug-server` docker image, and
 ![debug](./Media/debug.png "source debugging")
 
 > Docker containers will be auto stopped and removed after the execution.
+
+Note that if some prerequisites are missing for the debugger client (lldb), like ```libncurses6``` for debug under WSL2, the debug will not start fully and after switching to the Run & Debug menu, nothing will show.
+To  diagnose this type of deficiency, once the debugging is in progress (as seen by debug console showing the program stopped waiting for debugger connection), you can start manual debugging instead.
+For that, find ```lldb``` in the vscode extension files. For WSL, it is in ~/.vscode-server/extensions/wamr-ide.wamride-\<your version>/resource/debug/linux/bin/ .
+From that folder, run ```./lldb``` and follow the basic steps:
+> (lldb) platform select remote-linux  
+(lldb) process connect -p wasm connect://xxx.xxx.xxx.xxx:1234
+
+If lldb crashes, you will get  a hint of what dependency is missing.
+Note also that you may want to stop the container used for debugging if it is stuck, using the Docker extension.
